@@ -1,3 +1,3 @@
 # gpawk
 
-AWK sped up with the GPU. gpawk supports support a subset of AWK that most sane stick to.
+AWK sped up with the GPU. gpawk supports a subset of AWK that most sane people stick to.
