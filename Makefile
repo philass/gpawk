@@ -3,3 +3,7 @@ main: main.cpp
 
 gpu_awk: awk.cu
 	nvcc awk.cu -o awk
+
+clean: 
+	rm main
+
