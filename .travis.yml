@@ -1,0 +1,14 @@
+env:
+  global:
+    - CUDA_VERSION="10.0"
+    - CUDA_PKG_VERSION="130-1"
+    - CUDA_PKG=cuda-repo-ubuntu1404_${CUDA_VERSION}.${CUDA_PKG_VERSION}_amd64.deb
+    - CUDA_LIB_LOCAL=${HOME}/cuda_lib_${CUDA_VERSION}
+    - CUDA_HOME=${CUDA_LIB_LOCAL}
+
+script:
+  - make
+  - make gpu_awk
+
+after_script:
+  - make clean
