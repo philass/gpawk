@@ -1,3 +1,6 @@
+tokenizer: tokenizer.cpp
+	g++ -std=c++11 -c tokenizer.cpp -o tokenizer
+
 main: main.cpp
 	g++ main.cpp -o main
 
