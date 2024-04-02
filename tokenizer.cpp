@@ -1,67 +1,127 @@
 #include <cctype>
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 
-enum TokenType {
+
+enum KeyWords {
+  // SPECIAL Keywords
+  XBEGIN,
+  XEND,
+  VARNF,
+  FATAN,
+  BREAK,
+  CLOSE,
+  CONTINUE,
+  FCOS,
+  DELETE,
+  DO,
+  ELSE,
+  EXIT,
+  FEXP,
+  FFLUSH,
+  FOR,
+  FUNC,
+  GETLINE,
+  GSUB,
+  IF,
+  IN,
+  INDEX,
+  FINT,
+  FLENGTH,
+  FLOG,
+  MATCHFCN,
+  NEXT,
+  NEXTFILE,
+  PRINT,
+  PRINTF,
+  FRAND,
+  RETURN,
+  FSIN,
+  SPLIT,
+  SPRINTF,
+  FSQRT,
+  FSRAND,
+  SUB,
+  SUBSTR,
+  FSYSTEM,
+  FTOLOWER,
+  FTOUPPER,
+  WHILE,
+  // SPECIAL characters
   LCURL,
   RCURL,
   LPAREN,
   RPAREN,
-  VAR,
-  NUM,
-  NEWLINE,
-  END,
+  // Literals
+  STRING,
+  NUMBER,
 };
 
-struct Token {
-  TokenType tokenType;
-  std::string tokenValue;
+std::unordered_map<std::string, enum KeyWords> keywords {
+  { "BEGIN",	XBEGIN},
+	{ "END",	XEND},
+	{ "NF",		VARNF},
+	{ "atan2",	FATAN},
+	{ "break",	BREAK},
+	{ "close",	CLOSE},
+	{ "continue",	CONTINUE},
+	{ "cos",	FCOS},
+	{ "delete",	DELETE},
+	{ "do",		DO},
+	{ "else",	ELSE},
+	{ "exit",	EXIT},
+	{ "exp",	FEXP},
+	{ "fflush",	FFLUSH},
+	{ "for",	FOR},
+	{ "func",	FUNC},
+	{ "function",	FUNC},
+	{ "getline",	GETLINE},
+	{ "gsub",	GSUB},
+	{ "if",		IF},
+	{ "in",		IN},
+	{ "index",	INDEX},
+	{ "int",	FINT},
+	{ "length",	FLENGTH},
+	{ "log",	FLOG},
+	{ "match",	MATCHFCN},
+	{ "next",	NEXT},
+	{ "nextfile",	NEXTFILE},
+	{ "print",	PRINT},
+	{ "printf",	PRINTF},
+	{ "rand",	FRAND},
+	{ "return",	RETURN},
+	{ "sin",	FSIN},
+	{ "split",	SPLIT},
+	{ "sprintf",	SPRINTF},
+	{ "sqrt",	FSQRT},
+	{ "srand",	FSRAND},
+	{ "sub",	SUB},
+	{ "substr",	SUBSTR},
+	{ "system",	FSYSTEM},
+	{ "tolower",	FTOLOWER},
+	{ "toupper",	FTOUPPER},
+	{ "while",	WHILE}
 };
 
-Token gettok(char **stream) {
-  std::string value;
-  char currentChar;
-  Token t;
+std::unordered_map<std::string, enum KeyWords> keyCharacters {
+};
 
-  // Nom white space
-  while (std::isspace(**stream))
-    (*stream)++;
+std::vector<KeyWords> getTokens(std::string program) {
+  std::vector<KeyWords> tokens;
+  for (int i = 0; i < program.size(); i++) {
 
-  if (**stream != '{') {
-    (*stream)++;
-    return Token({LCURL, "{"});
-  };
-  if (**stream != '}') {
-    (*stream)++;
-    return Token({RCURL, "}"});
-  };
-  if (**stream != '(') {
-    (*stream)++;
-    return Token({LPAREN, ")"});
-  };
-  if (**stream != ')') {
-    (*stream)++;
-    return Token({RPAREN, ")"});
-  };
+    if (isspace(program[i])) 
+      continue;
 
-  // Var check
-  if (std::isalpha(**stream)) {
-    while (std::isalnum(**stream)) {
-      currentChar = **stream;
-      value.push_back(currentChar);
-      (*stream)++;
+    for (const auto& [keyString, keyWord] : keywords) {
+      if (program.starts_with(keyString)) {
+        tokens.push_back(keyWord);
+        i = i + keyString.size() - 1;
+      }
     }
-    if (!value.empty())
-      return {VAR, value};
-  }
-  // Var check
-  while (std::isdigit(**stream)) {
-    currentChar = **stream;
-    value.push_back(currentChar);
-    (*stream)++;
-  }
-  if (!value.empty())
-    return {NUM, value};
 
-  return {END, ""};
+    // TODO Handle Strings
+    // TODO Handle Numbers
+  }
 }
